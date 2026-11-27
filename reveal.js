@@ -160,7 +160,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       const imported = readLegacyProducts();
       const initialProducts = imported ? imported.products : [createProduct("My product", "default-product")];
       for (let i = 0; i < initialProducts.length; i++) {
-        const savedProduct = await saveProduct(initialProducts[i], i);
+        const savedProduct = await saveProduct(initialProducts[i], i, true);
         if (!savedProduct) throw new Error("Could not save every initial product to Supabase.");
         products.push(savedProduct);
       }
@@ -174,8 +174,9 @@ window.addEventListener("DOMContentLoaded", async () => {
   try {
     await loadProductDatabase();
   } catch (err) {
-    setStatus("Could not load shared products: " + err.message, true);
-    loadingEl.textContent = "Configure Supabase in supabase-config.js, then refresh this page.";
+    const message = err instanceof Error ? err.message : String(err);
+    setStatus("Could not load shared products: " + message, true);
+    loadingEl.textContent = "Product library could not be loaded. See the status message for details.";
     return;
   }
 
@@ -401,7 +402,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     return data.publicUrl;
   }
 
-  async function saveProduct(product, sortOrder) {
+  async function saveProduct(product, sortOrder, throwOnError = false) {
     try {
       const productFolder = safeStoragePart(product.id);
       const savedProduct = {
@@ -429,7 +430,9 @@ window.addEventListener("DOMContentLoaded", async () => {
       }
       return savedProduct;
     } catch (err) {
-      setStatus("Could not save product to the shared database: " + err.message, true);
+      const message = err instanceof Error ? err.message : String(err);
+      setStatus("Could not save product to the shared database: " + message, true);
+      if (throwOnError) throw err;
       return null;
     }
   }
