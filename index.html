@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ingredient Ring — Three.js Product Reveal</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js" defer></script>
+  <script src="assets-data.js" defer></script>
+  <script src="reveal.js" defer></script>
+</head>
+<body>
+  <main class="workspace">
+    <section id="stage" class="stage" aria-label="Product reveal animation">
+      <div id="loading" class="loading">Loading…</div>
+      <div class="btn-row">
+        <button id="replay-btn" class="btn" type="button">Replay</button>
+        <button id="download-btn" class="btn" type="button">Download Video</button>
+      </div>
+    </section>
+
+    <aside class="manager" aria-labelledby="manager-title">
+      <header class="manager-header">
+        <p class="eyebrow">CUSTOMIZE YOUR REVEAL</p>
+        <h1 id="manager-title">Product library</h1>
+        <p class="manager-intro">Create and switch between product reveals. Changes are shared across devices.</p>
+      </header>
+
+      <section class="product-library" aria-labelledby="library-title">
+        <div class="section-heading">
+          <h2 id="library-title">Saved products</h2>
+          <span id="product-count" class="section-count">01</span>
+        </div>
+        <select id="product-select" class="text-input" aria-label="Select a product"></select>
+        <div class="product-library-actions">
+          <button id="product-add" class="btn" type="button">New product</button>
+          <button id="product-delete" class="reset-image" type="button">Delete product</button>
+        </div>
+        <label class="product-name-label" for="product-name">Product name</label>
+        <input id="product-name" class="text-input" type="text" maxlength="80" />
+      </section>
+
+      <section class="product-editor" aria-labelledby="product-title">
+        <div class="section-heading">
+          <h2 id="product-title">Product image</h2>
+          <span class="section-count">01</span>
+        </div>
+        <div class="product-row">
+          <img id="product-preview" class="product-preview" alt="Current product" />
+          <div class="product-actions">
+            <label class="upload-btn" for="product-upload">Change image</label>
+            <input id="product-upload" class="file-input" type="file" accept="image/*" />
+            <button id="product-reset" class="reset-image" type="button">Reset to original</button>
+            <p>Images are optimized before saving.</p>
+          </div>
+        </div>
+        <h3 class="entrance-label">Product reveal style</h3>
+        <div class="style-carousel" aria-label="Product reveal styles">
+          <button id="product-style-prev" class="style-arrow" type="button" aria-label="Previous reveal style">&lsaquo;</button>
+          <div class="style-card" aria-live="polite">
+            <span id="product-style-position" class="style-position"></span>
+            <h4 id="product-style-name"></h4>
+            <p id="product-style-description"></p>
+          </div>
+          <button id="product-style-next" class="style-arrow" type="button" aria-label="Next reveal style">&rsaquo;</button>
+        </div>
+        <div id="product-style-dots" class="style-dots" aria-label="Choose a reveal style"></div>
+      </section>
+
+      <section class="ingredients-editor" aria-labelledby="ingredients-title">
+        <div class="section-heading">
+          <h2 id="ingredients-title">Ingredients</h2>
+          <span id="ingredient-count" class="section-count">0</span>
+        </div>
+        <div id="ingredient-list" class="ingredient-list"></div>
+        <form id="add-ingredient-form" class="add-form">
+          <label for="new-ingredient-name">Add an ingredient</label>
+          <input id="new-ingredient-name" class="text-input" type="text" placeholder="Ingredient name" required maxlength="80" />
+          <label class="upload-btn add-upload" for="new-ingredient-image">Choose image</label>
+          <input id="new-ingredient-image" class="file-input" type="file" accept="image/*" required />
+          <button class="btn add-btn" type="submit">Add ingredient</button>
+        </form>
+      </section>
+      <p id="manager-status" class="manager-status" role="status" aria-live="polite"></p>
+    </aside>
+  </main>
+</body>
+</html>
